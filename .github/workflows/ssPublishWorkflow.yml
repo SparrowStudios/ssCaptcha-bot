@@ -1,0 +1,38 @@
+name: "[SparrowStudios] Template Repo Publish"
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+env:
+  bot-name: template-bot
+
+jobs:
+  add-release-asset:
+    runs-on: self-hosted
+    permissions:
+      contents: write
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Build project
+      run: echo BUILD CODE HERE
+
+    - name: Copy Misc Files
+      run: |
+        Copy-Item "${{ github.workspace }}\LICENSE" -Destination "${{ github.workspace }}\bld\${{ env.bot-name }}"
+        Copy-Item "${{ github.workspace }}\README.md" -Destination "${{ github.workspace }}\bld\${{ env.bot-name }}"
+      
+    - name: Create Archives
+      run: |
+        New-Item -Path "${{ github.workspace }}\" -Name "release-assets" -ItemType "directory"
+        Compress-Archive -Path ${{ github.workspace }}\bld\* -DestinationPath ${{ github.workspace }}\release-assets\${{ env.bot-name }}-${{ github.ref_name }}.zip
+
+    - name: Upload Release Assets
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        gh release upload ${{ github.ref_name }} ${{ github.workspace }}\release-assets\${{ env.bot-name }}-${{ github.ref_name }}.zip

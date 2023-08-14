@@ -1,0 +1,64 @@
+name: "[SparrowStudios] Template Repo CI"
+
+on:
+  push:
+    branches:
+      - "master"
+      - "develop"
+      - "feature/**"
+  pull_request:
+    branches:
+      - "master"
+      - "develop"
+      - "feature/**"
+
+env:
+  bot-name: template-bot
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Build project
+      run: echo BUILD CODE HERE
+
+    - name: Copy Files
+      run: |
+        Copy-Item "${{ github.workspace }}/LICENSE" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}"
+        Copy-Item "${{ github.workspace }}/README.md" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}"
+
+    - name: Upload Build Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: bot-deploy-${{ env.bot-name }}
+        path: ${{ github.workspace }}
+        retention-days: 1
+
+
+  deploy-prod:
+    needs: build
+    if: ${{ github.event_name == 'push' && ((github.base_ref == 'master' || github.ref == 'refs/heads/master')) }}
+    runs-on: self-hosted
+
+    steps:
+    - name: Download Build Artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: bot-deploy-${{ env.bot-name }}
+        path: ${{ github.workspace }}
+
+    - name: Build project
+      run: echo BUILD CODE HERE
+
+    - name: Deploy to dev server
+      uses: garygrossgarten/github-action-scp@release
+      with:
+        local: ${{ github.workspace }}
+        remote: C:\fivem-server\txData\developmentServer1\resources\[dev-scripts]
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        password: ${{ secrets.SSH_PASSWORD }}

@@ -1,0 +1,32 @@
+{
+  "name": "template-discord-ts",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "tsc && node dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SparrowStudios/template-discord-ts.git"
+  },
+  "author": "SparrowStudios",
+  "license": "Mozilla Public License Version 2.0",
+  "bugs": {
+    "url": "https://github.com/SparrowStudios/template-discord-ts/issues"
+  },
+  "homepage": "https://github.com/SparrowStudios/template-discord-ts#readme",
+  "dependencies": {
+    "@haileybot/captcha-generator": "^1.7.0",
+    "discord.js": "^14.11.0",
+    "dotenv": "^16.3.1",
+    "glob": "^7.2.0",
+    "mysql2": "^3.5.1"
+  },
+  "devDependencies": {
+    "@types/mysql": "^2.15.21",
+    "@types/node": "^20.4.2",
+    "@types/glob": "^7.2.0",
+    "typescript": "^5.1.6"
+  }
+}
