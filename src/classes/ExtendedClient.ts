@@ -9,6 +9,8 @@ import { IRegisterCommandsOptions } from "./typings/IRegisterCommandsOptions";
 import { Command } from "./Command";
 import { FileNotCommandException } from "./exceptions/FileNotCommandException";
 import { formatString } from "./CommonFunctions";
+import { DbManager } from "../mysql/dbManager";
+import { MysqlConfig } from "../configs/mysqlConfig";
 
 const globPromise = promisify(glob);
 

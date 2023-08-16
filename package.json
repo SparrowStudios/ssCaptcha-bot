@@ -1,5 +1,5 @@
 {
-  "name": "template-discord-ts",
+  "name": "ssCaptcha-bot",
   "version": "0.1.0",
   "description": "",
   "main": "index.js",
@@ -8,25 +8,26 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SparrowStudios/template-discord-ts.git"
+    "url": "git+https://github.com/SparrowStudios/ssCaptcha-bot.git"
   },
   "author": "SparrowStudios",
   "license": "Mozilla Public License Version 2.0",
   "bugs": {
-    "url": "https://github.com/SparrowStudios/template-discord-ts/issues"
+    "url": "https://github.com/SparrowStudios/ssCaptcha-bot/issues"
   },
-  "homepage": "https://github.com/SparrowStudios/template-discord-ts#readme",
+  "homepage": "https://github.com/SparrowStudios/ssCaptcha-bot#readme",
   "dependencies": {
-    "@haileybot/captcha-generator": "^1.7.0",
+    "canvas": "^2.11.2",
+    "crypto": "^1.0.1",
     "discord.js": "^14.11.0",
     "dotenv": "^16.3.1",
     "glob": "^7.2.0",
     "mysql2": "^3.5.1"
   },
   "devDependencies": {
+    "@types/glob": "^7.2.0",
     "@types/mysql": "^2.15.21",
     "@types/node": "^20.4.2",
-    "@types/glob": "^7.2.0",
     "typescript": "^5.1.6"
   }
 }

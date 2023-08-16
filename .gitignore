@@ -1,8 +1,7 @@
 .env
-dist
-dist/**
-node_modules
-node_modules/**
+captchas/**
 logs/**
 errors/**
+dist
+node_modules
 !**/.gitkeep

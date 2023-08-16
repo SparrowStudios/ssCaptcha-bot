@@ -3,17 +3,17 @@
 </p>
 <p align="center">
     <a href="https://github.com/badges/shields/graphs/contributors" alt="Contributors">
-        <img src="https://img.shields.io/github/contributors/SparrowStudios/template-repo" />
+        <img src="https://img.shields.io/github/contributors/SparrowStudios/ssCaptcha-bot" />
     </a>
     <a href="./LICENSE" alt="License">
-        <img src="https://img.shields.io/github/license/SparrowStudios/template-repo" />
+        <img src="https://img.shields.io/github/license/SparrowStudios/ssCaptcha-bot" />
     </a>
     <a href="https://discord.gg/FTYjcbkzFn" alt="Discord">
         <img src="https://img.shields.io/discord/1116847034863984730?label=Discord&logo=Discord" />
     </a>
 </p>
 
-# template-repo
+# ssCaptcha Bot
 A template repository for SparrowStudios projects 
 
 # Discord

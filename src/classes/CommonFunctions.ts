@@ -1,3 +1,8 @@
+import { randomBytes } from "crypto";
+import { writeFileSync } from "fs";
+import { DbCaptcha } from "../mysql/models/DbCaptcha";
+import Captcha from "./Captcha";
+
 export function formatString(str: string, ...replacements: any[]): string {
     return str.replace(/{(\d+)}/g, function(match, number) { return typeof replacements[number] != 'undefined' ? replacements[number] : match; });
 }
@@ -30,82 +35,41 @@ export function UTCTimestamp(): string {
     );
 }
 
-// export async function recursiveFileSearch(path: string, callback?: Function): Promise<string[]> {
-//     return new Promise(async function(promiseResolve: any, promiseReject: any) {
-//         try {
-//             var result: string[] = [];
+export function randomCaptchaText(): string {
+    const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    return Array(6)
+        .join()
+        .split(',')
+        .map(() => chars.charAt(Math.floor(Math.random() * chars.length)))
+        .join('');
+}
 
-//             readdir(path, async function(error, files) {
-//                 if (error) promiseReject();
-//                 var i: number = 0;
+export function shuffleArray(arr: number[]): number[] {
+    let i: number = arr.length,
+			temp: number,
+			randomIndex: number;
+    // While there remain elements to shuffle...
+    while (0 !== i) {
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * i);
+        i -= 1;
+        // And swap it with the current element.
+        temp = arr[i];
+        arr[i] = arr[randomIndex];
+        arr[randomIndex] = temp;
+    }
+    return arr;
+}
 
-//                 async function next(): Promise<void> {
-//                     var file: string = files[i++];
-//                     if (file === undefined || !file) return promiseResolve(result);
-                    
-//                     file = resolve(path, file);
+export async function generateCaptcha(): Promise<DbCaptcha> {
+    const captcha = new DbCaptcha();
+    const image = new Captcha();
 
-//                     stat(file, async function(_error, stat) {
-//                         if (stat && stat.isDirectory()) {
-//                             await recursiveFileSearch(path, async function(e: any, _result: any) {
-//                                 result = result.concat(_result);
-//                                 next();
-//                             });
-//                         } else {
-//                             result.push(file);
-//                             next();
-//                         }
-//                     });
-//                 }
+    captcha.image = image.buffer;
+    captcha.dataUrl = image.dataURL;
+    captcha.value = image.value;
 
-//                 await next();
-//             });
-//         } catch (error) { promiseReject(error); }
-//     });
-// }
+    writeFileSync("Test.png", captcha.image);
 
-// export async function loadEvents(): Promise<Array<BotEvent>> {
-//     Logger.log("Starting to load events", "init");
-
-//     const events: Array<BotEvent> = new Array<BotEvent>();
-//     const eventsDir: string = formatString("{0}\\src\\client\\events", projectRoot);
-//     const eventFiles = await recursiveFileSearch(eventsDir);
-    
-//     for (let i = 0; i < eventFiles.length; i++) {
-//         const file = eventFiles[i];
-        
-//         const raw = await import(file);
-//         const event = raw.default ?? raw[Object.getOwnPropertyNames(raw).filter(n => n !== "__esModule")[0]];
-        
-//         if (!(event.prototype instanceof BotEvent)) throw new FileNotEventException(file);
-
-//         events.push(event);
-//     }
-
-//     Logger.log("Finished loading events", "init");
-
-//     return events;
-// }
-
-// export async function loadCommands(): Promise<Array<BotCommand>> {
-//     Logger.log("Starting to load commands", "init");
-
-//     const commands: Array<BotCommand> = new Array<BotCommand>();
-//     const commandsDir: string = formatString("{0}\\src\\client\\commands", projectRoot);
-//     const commandFiles = await recursiveFileSearch(commandsDir);
-    
-//     for (let i = 0; i < commandFiles.length; i++) {
-//         const file = commandFiles[i];
-        
-//         const raw = await import(file);
-//         const command = raw.default ?? raw[Object.getOwnPropertyNames(raw).filter(n => n !== "__esModule")[0]];
-        
-//         if (!(command.prototype instanceof BotCommand)) throw new FileNotCommandException(file);
-        
-//         commands.push(command);
-//     }
-
-//     Logger.log("Finished loading commands", "init");
-
-//     return commands;
-// }
+    return captcha;
+}

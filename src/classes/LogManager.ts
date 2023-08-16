@@ -17,6 +17,17 @@ export class Logger {
      * @param {string} error content to log to console
      * @param {string} module the module where the error originates from
      */
+    static warn(message: string, module: string) {
+        const output: string = formatString("{0} [{1}] WARN: {2}", UTCTimestamp(), module.toLocaleUpperCase(), message.trim());
+        
+        console.log(output);
+        writeFile(formatString("./logs/{0}.log", UTCDate()), formatString("\n{0}", output), { flag: "a+" }, function(err) { });
+    }
+
+    /**
+     * @param {string} error content to log to console
+     * @param {string} module the module where the error originates from
+     */
     static error(error: Error, module: string) {
         const output: string = formatString("{0} [{1}] ERROR: {2}", UTCTimestamp(), module.toLocaleUpperCase(), error.message.trim());
         

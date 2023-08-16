@@ -1,4 +1,4 @@
-name: "[SparrowStudios] Template Repo Publish"
+name: "[SparrowStudios] ssCaptcha Bot Publish"
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - "v*.*.*"
 
 env:
-  bot-name: template-bot
+  bot-name: ssCaptcha-bot
 
 jobs:
   add-release-asset:
