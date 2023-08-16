@@ -38,14 +38,14 @@ jobs:
         New-Item -Path "${{ github.workspace }}/bld/${{ env.bot-name }}/assets" -ItemType "directory"
         New-Item -Path "${{ github.workspace }}/bld/${{ env.bot-name }}/logs" -ItemType "directory"
         New-Item -Path "${{ github.workspace }}/bld/${{ env.bot-name }}/error" -ItemType "directory"
-        Copy-Item "${{ github.workspace }}/node_modules/*" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}/node_modules"
-        Copy-Item "${{ github.workspace }}/assets/*" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}/dist"
-        Copy-Item "${{ github.workspace }}/dist/*" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}/dist"
-        Copy-Item "${{ github.workspace }}/.env" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}"
-        Copy-Item "${{ github.workspace }}/package-lock.json" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}"
-        Copy-Item "${{ github.workspace }}/package.json" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}"
-        Copy-Item "${{ github.workspace }}/LICENSE" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}"
-        Copy-Item "${{ github.workspace }}/README.md" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}"
+        Copy-Item "${{ github.workspace }}/node_modules/*" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}/node_modules" -Force -Recurse
+        Copy-Item "${{ github.workspace }}/assets/*" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}/dist" -Force -Recurse
+        Copy-Item "${{ github.workspace }}/dist/*" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}/dist" -Force -Recurse
+        Copy-Item "${{ github.workspace }}/.env" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}" -Force -Recurse
+        Copy-Item "${{ github.workspace }}/package-lock.json" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}" -Force -Recurse
+        Copy-Item "${{ github.workspace }}/package.json" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}" -Force -Recurse
+        Copy-Item "${{ github.workspace }}/LICENSE" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}" -Force -Recurse
+        Copy-Item "${{ github.workspace }}/README.md" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}" -Force -Recurse
 
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v3
