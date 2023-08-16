@@ -27,7 +27,9 @@ jobs:
       uses: actions/setup-node@v1
 
     - name: Build Dependencies
-      run: npm i
+      run: |
+        npm i
+        npm i --save typescript --global
 
     - name: Install Typescript
       uses: icrawl/action-tsc@v1
