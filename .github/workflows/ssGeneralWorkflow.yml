@@ -23,17 +23,6 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Build Dependencies
-      run: |
-        npm i
-        npm i --save typescript --global
-
-    - name: Install Typescript
-      uses: icrawl/action-tsc@v1
-
-    - name: Compile Typescript
-      run: tsc
-
     - name: Generate ENV File
       run: |
         "DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }}" >> "${{ github.workspace }}/.env"
@@ -44,8 +33,11 @@ jobs:
         "MYSQL_PORT=${{ secrets.MYSQL_PORT }}" >> "${{ github.workspace }}/.env"
         "MYSQL_USERNAME=${{ secrets.MYSQL_USERNAME }}" >> "${{ github.workspace }}/.env"
 
-    - name: Build File Directory
-      run : |
+    - name: Build Project
+      run: |
+        npm install typescript --save-dev
+        npm install
+
         New-Item -Path "${{ github.workspace }}/bld" -ItemType "directory"
         New-Item -Path "${{ github.workspace }}/bld/${{ env.bot-name }}" -ItemType "directory"
         New-Item -Path "${{ github.workspace }}/bld/${{ env.bot-name }}/logs" -ItemType "directory"
@@ -73,8 +65,7 @@ jobs:
         Copy-Item "${{ github.workspace }}/LICENSE" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}" -Force -Recurse
         Copy-Item "${{ github.workspace }}/README.md" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}" -Force -Recurse
 
-    - name: Compress Build
-      run: Compress-Archive -Path "${{ github.workspace }}/bld/${{ env.bot-name }}" -DestinationPath "${{ github.workspace }}/bld/${{ env.bot-name }}.zip"
+        Compress-Archive -Path "${{ github.workspace }}/bld/${{ env.bot-name }}" -DestinationPath "${{ github.workspace }}/bld/${{ env.bot-name }}.zip"
         
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v3
