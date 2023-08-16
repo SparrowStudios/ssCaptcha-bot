@@ -23,9 +23,6 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Install Node
-      uses: actions/setup-node@v1
-
     - name: Build Dependencies
       run: |
         npm i
