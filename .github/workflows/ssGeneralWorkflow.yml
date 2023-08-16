@@ -38,7 +38,7 @@ jobs:
         New-Item -Path "${{ github.workspace }}/bld/${{ env.bot-name }}/assets" -ItemType "directory"
         New-Item -Path "${{ github.workspace }}/bld/${{ env.bot-name }}/logs" -ItemType "directory"
         New-Item -Path "${{ github.workspace }}/bld/${{ env.bot-name }}/error" -ItemType "directory"
-        Get-ChildItem -Attributes D -Path "${{ github.workspace }}/node_modules/*" -Recurse | New-Item -Path "${{ github.workspace }}/bld/${{ env.bot-name }}/node_modules" -ItemType "directory"
+    
     - name: Move Files
       run: |
         Get-ChildItem -Attributes !D -Path "${{ github.workspace }}/node_modules/*" -Recurse | Copy-Item -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}/node_modules"
