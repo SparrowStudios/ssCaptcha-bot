@@ -69,7 +69,5 @@ export async function generateCaptcha(): Promise<DbCaptcha> {
     captcha.dataUrl = image.dataURL;
     captcha.value = image.value;
 
-    writeFileSync("Test.png", captcha.image);
-
     return captcha;
 }
