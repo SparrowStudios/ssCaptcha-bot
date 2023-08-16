@@ -62,7 +62,10 @@ export const DiscordConfig = {
                     {
                         type: "rich",
                         title: "SparrowStudios Verification",
-                        description: "To gain access to the SparrowStudios Discord you must first complete a CAPTCHA to verify you are human.\n\nWhen you are ready to take the CAPTCHA click the `Verify` button attached to this message",
+                        description: "To gain access to the SparrowStudios Discord you must first complete a CAPTCHA to verify you are human." 
+                        + "\n\nYou can view your CAPTCHA by clicking the `Show Captcha` button attached to this message." 
+                        + "\n\nWhen you are ready to take the CAPTCHA click the `Verify` button attached to this message"
+                        + "\n\nIn the event the bot is offline please reach out to a member of the <@&1116897313357578351>",
                         color: 0xeb212e,
                         footer: {
                             text: "ssCaptcha Bot was designed by SparrowStudios",
