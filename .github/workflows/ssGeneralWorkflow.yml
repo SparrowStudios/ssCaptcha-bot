@@ -23,12 +23,12 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Build Dependencies
-      run: |
-        npm i
-        npm i typescript --save --global
+    # - name: Build Dependencies
+    #   run: |
+    #     npm i
+    #     npm i typescript --save --global
 
-    - name: tsc
+    - name: Install Typescript
       uses: icrawl/action-tsc@v1
 
     - name: Move Files
@@ -38,7 +38,6 @@ jobs:
         New-Item -Path "${{ github.workspace }}/bld/${{ env.bot-name }}/assets" -ItemType "directory"
         New-Item -Path "${{ github.workspace }}/bld/${{ env.bot-name }}/logs" -ItemType "directory"
         New-Item -Path "${{ github.workspace }}/bld/${{ env.bot-name }}/error" -ItemType "directory"
-        Copy-Item "${{ github.workspace }}/node_modules/*" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}/node_modules" -Force -Recurse
         Copy-Item "${{ github.workspace }}/assets/*" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}/dist" -Force -Recurse
         Copy-Item "${{ github.workspace }}/dist/*" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}/dist" -Force -Recurse
         Copy-Item "${{ github.workspace }}/.env" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}" -Force -Recurse
@@ -47,6 +46,11 @@ jobs:
         Copy-Item "${{ github.workspace }}/LICENSE" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}" -Force -Recurse
         Copy-Item "${{ github.workspace }}/README.md" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}" -Force -Recurse
 
+    - name: Build Dependencies
+      run: |
+        cd "bld/${{ env.bot-name }}"
+        npm i
+        
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v3
       with:
