@@ -33,10 +33,12 @@ jobs:
         "MYSQL_PORT=${{ secrets.MYSQL_PORT }}" >> "${{ github.workspace }}/.env"
         "MYSQL_USERNAME=${{ secrets.MYSQL_USERNAME }}" >> "${{ github.workspace }}/.env"
 
+    - name: Build Dependencies
+      uses: npm install
+      
     - name: Build Project
       run: |
         npm install typescript --save-dev
-        npm install
 
         tsc
 
