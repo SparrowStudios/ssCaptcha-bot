@@ -31,6 +31,16 @@ jobs:
     - name: Install Typescript
       uses: icrawl/action-tsc@v1
 
+    - name: Generate ENV File
+      run: |
+        "DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }}" >> "${{ github.workspace }}/.env"
+        "GUILD_ID=${{ secrets.GUILD_ID }}" >> "${{ github.workspace }}/.env"
+        "MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }}" >> "${{ github.workspace }}/.env"
+        "MYSQL_HOST=${{ secrets.MYSQL_HOST }}" >> "${{ github.workspace }}/.env"
+        "MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}" >> "${{ github.workspace }}/.env"
+        "MYSQL_PORT=${{ secrets.MYSQL_PORT }}" >> "${{ github.workspace }}/.env"
+        "MYSQL_USERNAME=${{ secrets.MYSQL_USERNAME }}" >> "${{ github.workspace }}/.env"
+
     - name: Build File Directory
       run : |
         New-Item -Path "${{ github.workspace }}/bld" -ItemType "directory"
