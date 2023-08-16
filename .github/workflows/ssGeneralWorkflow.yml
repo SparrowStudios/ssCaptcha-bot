@@ -35,16 +35,25 @@ jobs:
       run : |
         New-Item -Path "${{ github.workspace }}/bld" -ItemType "directory"
         New-Item -Path "${{ github.workspace }}/bld/${{ env.bot-name }}" -ItemType "directory"
-        New-Item -Path "${{ github.workspace }}/bld/${{ env.bot-name }}/assets" -ItemType "directory"
         New-Item -Path "${{ github.workspace }}/bld/${{ env.bot-name }}/logs" -ItemType "directory"
         New-Item -Path "${{ github.workspace }}/bld/${{ env.bot-name }}/error" -ItemType "directory"
-        Get-ChildItem -Attributes D -Path "${{ github.workspace }}/node_modules/*" -Recurse | ForEach-Object { New-Item -Path "${{ github.workspace }}/bld/${{ env.bot-name }}/$_.Name" -ItemType "directory" }
 
-    - name: Move Files
-      run: |
-        Get-ChildItem -Attributes !D -Path "${{ github.workspace }}/node_modules/*" -Recurse | Copy-Item -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}/node_modules"
-        Copy-Item "${{ github.workspace }}/assets/*" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}/dist" -Force -Recurse
-        Copy-Item "${{ github.workspace }}/dist/*" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}/dist" -Force -Recurse
+        $rootSourceDir = "${{ github.workspace }}"
+        $rootDestinationDir = "${{ github.workspace }}/bld/${{ env.bot-name }}"
+        $targetFolders = "assets", "dist", "node_modules"
+
+        foreach ($folder in $targetFolders) {
+          $sourceDir = Join-Path -Path $rootSourceDir -ChildPath "node_modules"
+          $destinationDir = Join-Path -Path $rootDestinationDir -ChildPath "node_modules"
+          Get-ChildItem -Attributes D -Path "$sourceDir\*" -Recurse | ForEach-Object { 
+            $sourcePath = $_.FullName
+            $relativePath = $sourcePath.Substring($sourceDir.Length + 1)
+            $destinationPath = Join-Path -Path $destinationDir -ChildPath $relativePath
+            echo "Copying folder .\$relativePath => $destinationPath"
+            Copy-Item -Path $sourcePath -Destination $destinationPath -Recurse -Force
+          }
+        }
+
         Copy-Item "${{ github.workspace }}/.env" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}" -Force -Recurse
         Copy-Item "${{ github.workspace }}/package-lock.json" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}" -Force -Recurse
         Copy-Item "${{ github.workspace }}/package.json" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}" -Force -Recurse
