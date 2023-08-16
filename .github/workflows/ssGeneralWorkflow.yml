@@ -31,6 +31,9 @@ jobs:
     - name: Install Typescript
       uses: icrawl/action-tsc@v1
 
+    - name: Compile Typescript
+      run: tsc
+
     - name: Generate ENV File
       run: |
         "DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }}" >> "${{ github.workspace }}/.env"
@@ -70,16 +73,14 @@ jobs:
         Copy-Item "${{ github.workspace }}/LICENSE" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}" -Force -Recurse
         Copy-Item "${{ github.workspace }}/README.md" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}" -Force -Recurse
 
-    - name: Build Dependencies
-      run: |
-        cd "bld/${{ env.bot-name }}"
-        npm i
+    - name: Compress Build
+      run: Compress-Archive -Path "${{ github.workspace }}/bld/${{ env.bot-name }}" -DestinationPath "${{ github.workspace }}/bld/${{ env.bot-name }}.zip"
         
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v3
       with:
         name: bot-deploy-${{ env.bot-name }}
-        path: ${{ github.workspace }}/bld
+        path: ${{ github.workspace }}/bld/${{ env.bot-name }}.zip
         retention-days: 1
 
 
