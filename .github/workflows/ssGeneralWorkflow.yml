@@ -31,14 +31,17 @@ jobs:
     - name: Install Typescript
       uses: icrawl/action-tsc@v1
 
-    - name: Move Files
-      run: |
+    - name: Build File Directory
+      run : |
         New-Item -Path "${{ github.workspace }}/bld" -ItemType "directory"
         New-Item -Path "${{ github.workspace }}/bld/${{ env.bot-name }}" -ItemType "directory"
         New-Item -Path "${{ github.workspace }}/bld/${{ env.bot-name }}/assets" -ItemType "directory"
         New-Item -Path "${{ github.workspace }}/bld/${{ env.bot-name }}/logs" -ItemType "directory"
         New-Item -Path "${{ github.workspace }}/bld/${{ env.bot-name }}/error" -ItemType "directory"
-        Get-ChildItem -Path "${{ github.workspace }}/node_modules/*" -Recurse | Copy-Item -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}/node_modules"
+        Get-ChildItem -Attributes D -Path "${{ github.workspace }}/node_modules/*" -Recurse | New-Item -Path "${{ github.workspace }}/bld/${{ env.bot-name }}/node_modules" -ItemType "directory"
+    - name: Move Files
+      run: |
+        Get-ChildItem -Attributes !D -Path "${{ github.workspace }}/node_modules/*" -Recurse | Copy-Item -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}/node_modules"
         Copy-Item "${{ github.workspace }}/assets/*" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}/dist" -Force -Recurse
         Copy-Item "${{ github.workspace }}/dist/*" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}/dist" -Force -Recurse
         Copy-Item "${{ github.workspace }}/.env" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}" -Force -Recurse
