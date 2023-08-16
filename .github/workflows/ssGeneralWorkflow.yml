@@ -23,11 +23,16 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Build project
+    - name: Build Dependencies
       run: |
         npm i
         npm i typescript --save --global
-        tsc
+
+    - name: tsc
+      uses: icrawl/action-tsc@v1
+
+    - name: Move Files
+      run: |
         New-Item -Path "${{ github.workspace }}/bld" -ItemType "directory"
         New-Item -Path "${{ github.workspace }}/bld/${{ env.bot-name }}" -ItemType "directory"
         New-Item -Path "${{ github.workspace }}/bld/${{ env.bot-name }}/assets" -ItemType "directory"
