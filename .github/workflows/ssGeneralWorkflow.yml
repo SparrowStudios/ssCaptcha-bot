@@ -26,7 +26,7 @@ jobs:
     - name: Build project
       run: |
         npm i
-        npm i typescript
+        npm i typescript --save --global
         tsc
         New-Item -Path "${{ github.workspace }}/bld" -ItemType "directory"
         New-Item -Path "${{ github.workspace }}/bld/${{ env.bot-name }}" -ItemType "directory"
