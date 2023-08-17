@@ -40,6 +40,7 @@ jobs:
 
     - name: Build Project
       run: |
+        echo "Creating project build directory" 
         New-Item -Path "${{ github.workspace }}/bld" -ItemType "directory"
         New-Item -Path "${{ github.workspace }}/bld/${{ env.bot-name }}" -ItemType "directory"
         New-Item -Path "${{ github.workspace }}/bld/${{ env.bot-name }}/logs" -ItemType "directory"
@@ -50,23 +51,25 @@ jobs:
         $targetFolders = "assets", "dist", "node_modules"
 
         foreach ($folder in $targetFolders) {
+          echo "Copying files from folder $folder"
           $sourceDir = Join-Path -Path $rootSourceDir -ChildPath "node_modules"
           $destinationDir = Join-Path -Path $rootDestinationDir -ChildPath "node_modules"
           Get-ChildItem -Attributes D -Path "$sourceDir\*" -Recurse | ForEach-Object { 
             $sourcePath = $_.FullName
             $relativePath = $sourcePath.Substring($sourceDir.Length + 1)
             $destinationPath = Join-Path -Path $destinationDir -ChildPath $relativePath
-            echo "Copying folder .\$relativePath => $destinationPath"
+            echo "Copying folder .\$folder\$relativePath => $destinationPath"
             Copy-Item -Path $sourcePath -Destination $destinationPath -Recurse -Force
           }
         }
 
+        echo "Copying misc files"
         Copy-Item "${{ github.workspace }}/.env" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}" -Force -Recurse
-        Copy-Item "${{ github.workspace }}/package-lock.json" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}" -Force -Recurse
         Copy-Item "${{ github.workspace }}/package.json" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}" -Force -Recurse
         Copy-Item "${{ github.workspace }}/LICENSE" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}" -Force -Recurse
         Copy-Item "${{ github.workspace }}/README.md" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}" -Force -Recurse
 
+        echo "Compressing project to ZIP"
         Compress-Archive -Path "${{ github.workspace }}/bld/${{ env.bot-name }}" -DestinationPath "${{ github.workspace }}/bld/${{ env.bot-name }}.zip"
         
     - name: Upload Build Artifact
