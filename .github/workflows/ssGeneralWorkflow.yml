@@ -33,12 +33,13 @@ jobs:
         "MYSQL_PORT=${{ secrets.MYSQL_PORT }}" >> "${{ github.workspace }}/.env"
         "MYSQL_USERNAME=${{ secrets.MYSQL_USERNAME }}" >> "${{ github.workspace }}/.env"
 
-    - name: Build Dependencies
+    - name: Build Project
       run: |
         npm install
         & "$env:APPDATA\npm\tsc.cmd" 
 
-    - name: Build Project
+    - name: Build Artifact
+      if: ${{ github.event_name == 'push' && ((github.base_ref == 'master' || github.ref == 'refs/heads/master')) }}
       run: |
         echo "Creating project build directory" 
         New-Item -Path "${{ github.workspace }}/bld" -ItemType "directory"
