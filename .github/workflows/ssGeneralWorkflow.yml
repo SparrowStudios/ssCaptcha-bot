@@ -36,7 +36,7 @@ jobs:
     - name: Build Dependencies
       run: |
         npm install
-        tsc
+        & "$env:APPDATA\npm\tsc.cmd tsc" 
 
     - name: Build Project
       run: |
