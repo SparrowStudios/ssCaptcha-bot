@@ -98,16 +98,16 @@ jobs:
         name: bot-deploy-${{ env.bot-name }}
         path: ${{ github.workspace }}
 
-    # - name: Shutdown Current Bot Service
-    #   run: |
-    #     & "C:\mssm\mssm" stop ${{ env.bot-name }}
+    - name: Shutdown Current Bot Service
+      run: |
+        & "C:\mssm\mssm" stop ${{ env.bot-name }}
 
     - name: Clear Current Prod Dir
-      run: Remove-Item Z:\${{ env.bot-name }} -Recurse -Force
+      run: Remove-Item Z:\${{ env.bot-name }}\* -Recurse -Force
 
     - name: Unzip Artifact To Production Dir
-      run: Expand-Archive ${{ github.workspace }}\${{ env.bot-name }}.zip -DestinationPath Z:\${{ env.bot-name }} -PassThru
+      run: Expand-Archive ${{ github.workspace }}\${{ env.bot-name }}.zip -DestinationPath Z:\ -PassThru
 
-    # - name: Start Bot Service
-    #   run: |
-    #     & "C:\mssm\mssm" start ${{ env.bot-name }}
+    - name: Start Bot Service
+      run: |
+        & "C:\mssm\mssm" start ${{ env.bot-name }}
