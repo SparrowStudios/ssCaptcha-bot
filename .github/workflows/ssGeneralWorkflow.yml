@@ -54,6 +54,8 @@ jobs:
           echo "Copying files from folder $folder"
           $sourceDir = Join-Path -Path $rootSourceDir -ChildPath $folder
           $destinationDir = Join-Path -Path $rootDestinationDir -ChildPath $folder
+
+          Copy-Item -Path $sourceDir -Destination $destinationDir -Recurse -Force
           Get-ChildItem -Attributes D -Path "$sourceDir" -Recurse | ForEach-Object { 
             $sourcePath = $_.FullName
             $relativePath = $sourcePath.Substring($sourceDir.Length + 1)
