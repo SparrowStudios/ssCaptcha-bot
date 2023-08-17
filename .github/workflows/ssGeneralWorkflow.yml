@@ -35,11 +35,11 @@ jobs:
 
     - name: Build Dependencies
       run: |
-        npm install typescript --save-dev
-        npm install --production=false
-
+        npm install
         tsc
 
+    - name: Build Project
+      run: |
         New-Item -Path "${{ github.workspace }}/bld" -ItemType "directory"
         New-Item -Path "${{ github.workspace }}/bld/${{ env.bot-name }}" -ItemType "directory"
         New-Item -Path "${{ github.workspace }}/bld/${{ env.bot-name }}/logs" -ItemType "directory"
