@@ -18,18 +18,48 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Build project
-      run: echo BUILD CODE HERE
-
-    - name: Copy Misc Files
+    - name: Build Dependencies
       run: |
-        Copy-Item "${{ github.workspace }}\LICENSE" -Destination "${{ github.workspace }}\bld\${{ env.bot-name }}"
-        Copy-Item "${{ github.workspace }}\README.md" -Destination "${{ github.workspace }}\bld\${{ env.bot-name }}"
+        npm install
+        & "$env:APPDATA\npm\tsc.cmd" 
+
+    - name: Build Project
+      run: |
+        echo "Creating project build directory" 
+        New-Item -Path "${{ github.workspace }}/bld" -ItemType "directory"
+        New-Item -Path "${{ github.workspace }}/bld/${{ env.bot-name }}" -ItemType "directory"
+        New-Item -Path "${{ github.workspace }}/bld/${{ env.bot-name }}/logs" -ItemType "directory"
+        New-Item -Path "${{ github.workspace }}/bld/${{ env.bot-name }}/error" -ItemType "directory"
+
+        $rootSourceDir = "${{ github.workspace }}"
+        $rootDestinationDir = "${{ github.workspace }}/bld/${{ env.bot-name }}"
+        $targetFolders = "assets", "dist", "node_modules"
+
+        foreach ($folder in $targetFolders) {
+          echo "Copying files from folder $folder"
+          $sourceDir = Join-Path -Path $rootSourceDir -ChildPath $folder
+          $destinationDir = Join-Path -Path $rootDestinationDir -ChildPath $folder
+
+          Copy-Item -Path $sourceDir -Destination $destinationDir -Recurse -Force
+          Get-ChildItem -Attributes D -Path "$sourceDir" -Recurse | ForEach-Object { 
+            $sourcePath = $_.FullName
+            $relativePath = $sourcePath.Substring($sourceDir.Length + 1)
+            $destinationPath = Join-Path -Path $destinationDir -ChildPath $relativePath
+            echo "Copying folder .\$folder\$relativePath => $destinationPath"
+            Copy-Item -Path $sourcePath -Destination $destinationPath -Recurse -Force
+          }
+        }
+
+        echo "Copying misc files"
+        Copy-Item "${{ github.workspace }}/package.json" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}" -Force -Recurse
+        Copy-Item "${{ github.workspace }}/LICENSE" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}" -Force -Recurse
+        Copy-Item "${{ github.workspace }}/README.md" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}" -Force -Recurse
+        Copy-Item "${{ github.workspace }}/run.cmd" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}" -Force -Recurse
       
     - name: Create Archives
       run: |
         New-Item -Path "${{ github.workspace }}\" -Name "release-assets" -ItemType "directory"
-        Compress-Archive -Path ${{ github.workspace }}\bld\* -DestinationPath ${{ github.workspace }}\release-assets\${{ env.bot-name }}-${{ github.ref_name }}.zip
+        Compress-Archive -Path "${{ github.workspace }}/bld/${{ env.bot-name }}" -DestinationPath ${{ github.workspace }}\release-assets\${{ env.bot-name }}-${{ github.ref_name }}.zip
 
     - name: Upload Release Assets
       env:
