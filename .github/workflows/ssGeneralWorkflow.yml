@@ -94,14 +94,13 @@ jobs:
         name: bot-deploy-${{ env.bot-name }}
         path: ${{ github.workspace }}
 
-    - name: Build project
-      run: echo BUILD CODE HERE
+    # - name: Shutdown Current Bot Service
+    #   run: |
+    #     & "C:\mssm\mssm" stop ${{ env.bot-name }}
 
-    - name: Deploy to dev server
-      uses: garygrossgarten/github-action-scp@release
-      with:
-        local: ${{ github.workspace }}
-        remote: C:\fivem-server\txData\developmentServer1\resources\[dev-scripts]
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USERNAME }}
-        password: ${{ secrets.SSH_PASSWORD }}
+    - name: Unzip Artifact To Production Dir
+      run: Expand-Archive ${{ github.workspace }}\${{ env.bot-name }}.zip -DestinationPath Z:\${{ env.bot-name }}
+
+    # - name: Start Bot Service
+    #   run: |
+    #     & "C:\mssm\mssm" start ${{ env.bot-name }}
