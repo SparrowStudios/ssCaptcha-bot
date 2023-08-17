@@ -52,8 +52,8 @@ jobs:
 
         foreach ($folder in $targetFolders) {
           echo "Copying files from folder $folder"
-          $sourceDir = Join-Path -Path $rootSourceDir -ChildPath "node_modules"
-          $destinationDir = Join-Path -Path $rootDestinationDir -ChildPath "node_modules"
+          $sourceDir = Join-Path -Path $rootSourceDir -ChildPath $sourceDir
+          $destinationDir = Join-Path -Path $rootDestinationDir -ChildPath $sourceDir
           Get-ChildItem -Attributes D -Path "$sourceDir\*" -Recurse | ForEach-Object { 
             $sourcePath = $_.FullName
             $relativePath = $sourcePath.Substring($sourceDir.Length + 1)
