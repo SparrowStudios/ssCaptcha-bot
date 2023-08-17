@@ -100,7 +100,7 @@ jobs:
 
     - name: Shutdown Current Bot Service
       run: |
-        & "C:\mssm\mssm" stop ${{ env.bot-name }}
+        & "C:\mssm\mssm.exe" stop ${{ env.bot-name }}
 
     - name: Clear Current Prod Dir
       run: Remove-Item Z:\${{ env.bot-name }}\* -Recurse -Force
@@ -110,4 +110,4 @@ jobs:
 
     - name: Start Bot Service
       run: |
-        & "C:\mssm\mssm" start ${{ env.bot-name }}
+        & "C:\mssm\mssm.exe" start ${{ env.bot-name }}
