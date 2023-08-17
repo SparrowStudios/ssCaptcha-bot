@@ -92,8 +92,6 @@ export default new Event("interactionCreate", async (_: ExtendedClient, interact
             time: 5 * 60 * 1000
         });
 
-        console.log(modalSubmission);
-
         if (targetUserCaptcha?.expires < new Date()) {
             // Captcha expired
             modalSubmission.reply({
@@ -112,8 +110,8 @@ export default new Event("interactionCreate", async (_: ExtendedClient, interact
             if (gettingStartedRole === null || memberRole === null || targetGuildMember === null) return;
             if (gettingStartedRole === undefined || memberRole === undefined || targetGuildMember === undefined) return;
 
-            targetGuildMember?.roles.remove(gettingStartedRole);
-            targetGuildMember?.roles.add(memberRole);
+            await targetGuildMember?.roles.remove(gettingStartedRole);
+            await targetGuildMember?.roles.add(memberRole);
             
             if (dbUser === null) return;
 
