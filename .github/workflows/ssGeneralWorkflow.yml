@@ -87,7 +87,9 @@ jobs:
   deploy-prod:
     needs: build
     if: ${{ github.event_name == 'push' && ((github.base_ref == 'master' || github.ref == 'refs/heads/master')) }}
-    runs-on: self-hosted
+    runs-on: 
+      - self-hosted
+      - elevated
 
     steps:
     - name: Download Build Artifact
