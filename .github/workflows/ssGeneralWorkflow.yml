@@ -70,11 +70,13 @@ jobs:
         Copy-Item "${{ github.workspace }}/package.json" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}" -Force -Recurse
         Copy-Item "${{ github.workspace }}/LICENSE" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}" -Force -Recurse
         Copy-Item "${{ github.workspace }}/README.md" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}" -Force -Recurse
+        Copy-Item "${{ github.workspace }}/run.cmd" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}" -Force -Recurse
 
         echo "Compressing project to ZIP"
         Compress-Archive -Path "${{ github.workspace }}/bld/${{ env.bot-name }}" -DestinationPath "${{ github.workspace }}/bld/${{ env.bot-name }}.zip"
         
     - name: Upload Build Artifact
+      if: ${{ github.event_name == 'push' && ((github.base_ref == 'master' || github.ref == 'refs/heads/master')) }}
       uses: actions/upload-artifact@v3
       with:
         name: bot-deploy-${{ env.bot-name }}
@@ -98,8 +100,11 @@ jobs:
     #   run: |
     #     & "C:\mssm\mssm" stop ${{ env.bot-name }}
 
+    - name: Clear Current Prod Dir
+      run: Remove-Item Z:\${{ env.bot-name }} -Recurse -Force
+
     - name: Unzip Artifact To Production Dir
-      run: Expand-Archive ${{ github.workspace }}\${{ env.bot-name }}.zip -DestinationPath Z:\${{ env.bot-name }}
+      run: Expand-Archive ${{ github.workspace }}\${{ env.bot-name }}.zip -DestinationPath Z:\${{ env.bot-name }} -PassThru
 
     # - name: Start Bot Service
     #   run: |
