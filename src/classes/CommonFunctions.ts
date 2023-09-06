@@ -1,7 +1,10 @@
+import * as request from "request";
 import { randomBytes } from "crypto";
 import { writeFileSync } from "fs";
 import { DbCaptcha } from "../mysql/models/DbCaptcha";
 import Captcha from "./Captcha";
+import { DiscordConfig } from "../configs/DiscordConfig";
+import { Logger } from "./LogManager";
 
 export function formatString(str: string, ...replacements: any[]): string {
     return str.replace(/{(\d+)}/g, function(match, number) { return typeof replacements[number] != 'undefined' ? replacements[number] : match; });
@@ -70,4 +73,16 @@ export async function generateCaptcha(): Promise<DbCaptcha> {
     captcha.value = image.value;
 
     return captcha;
+}
+
+export async function sendOnlineWebhook() {
+    request.post(
+        DiscordConfig.statusWebhook ?? "",
+        { json: { content: '[ssCaptcha-Bot] <a:SwirlGreen:1147947711795044414> Online' } },
+        function (error, response, body) {
+            if (!error && response.statusCode == 200) {
+                Logger.warn(body, "Online_Webhook");
+            }
+        }
+    );
 }

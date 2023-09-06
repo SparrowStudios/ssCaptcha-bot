@@ -4,6 +4,7 @@ import { GatewayIntentBits } from "discord.js";
 export const DiscordConfig = {
     token: process.env.DISCORD_TOKEN,
     guildId: process.env.GUILD_ID,
+    statusWebhook: process.env.STATUS_WEBHOOK,
     intents: [
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMembers,

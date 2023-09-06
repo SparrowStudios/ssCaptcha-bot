@@ -2,7 +2,7 @@ import ExtendedClient from "../../classes/ExtendedClient";
 import { Channel, ChannelType, Client, Collection, Guild, GuildBasedChannel, GuildTextBasedChannel, Message, TextChannel } from "discord.js";
 import { Event } from "../../classes/Event";
 import { Logger } from "../../classes/LogManager";
-import { formatString } from "../../classes/CommonFunctions";
+import { formatString, sendOnlineWebhook } from "../../classes/CommonFunctions";
 import { DiscordConfig } from "../../configs/DiscordConfig";
 import { DbInfoMessageDaoImpl } from "../../mysql/dao/implementations/DbInfoMessageDaoImpl";
 import { DbInfoMessage } from "../../mysql/models/DbInfoMessage";
@@ -58,4 +58,7 @@ export default new Event("ready", async (extendedClient: ExtendedClient, client:
             }
         }
     }
+
+    // Send online webhook
+    await sendOnlineWebhook();
 });
