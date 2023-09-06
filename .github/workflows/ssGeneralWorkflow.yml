@@ -49,7 +49,7 @@ jobs:
 
         $rootSourceDir = "${{ github.workspace }}"
         $rootDestinationDir = "${{ github.workspace }}/bld/${{ env.bot-name }}"
-        $targetFolders = "assets", "dist",
+        $targetFolders = "assets", "dist"
 
         foreach ($folder in $targetFolders) {
           echo "Copying files from folder $folder"
