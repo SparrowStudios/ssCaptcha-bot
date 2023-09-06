@@ -49,7 +49,7 @@ jobs:
 
         $rootSourceDir = "${{ github.workspace }}"
         $rootDestinationDir = "${{ github.workspace }}/bld/${{ env.bot-name }}"
-        $targetFolders = "assets", "dist", "node_modules"
+        $targetFolders = "assets", "dist",
 
         foreach ($folder in $targetFolders) {
           echo "Copying files from folder $folder"
@@ -102,7 +102,7 @@ jobs:
     - name: Deploy Staging
       uses: garygrossgarten/github-action-scp@release
       with:
-        local: ${{ github.workspace }}\pre-stage
+        local: ${{ github.workspace }}\pre-stage\${{ env.bot-name }}
         remote: /home/jpadmin/stage/prod/${{ env.bot-name }}
         rmRemote: true
         host: ${{ secrets.SSH_HOST }}
