@@ -67,7 +67,6 @@ jobs:
         }
 
         echo "Copying misc files"
-        Copy-Item "${{ github.workspace }}/.env" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}" -Force -Recurse
         Copy-Item "${{ github.workspace }}/package.json" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}" -Force -Recurse
         Copy-Item "${{ github.workspace }}/LICENSE" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}" -Force -Recurse
         Copy-Item "${{ github.workspace }}/README.md" -Destination "${{ github.workspace }}/bld/${{ env.bot-name }}" -Force -Recurse
@@ -88,9 +87,7 @@ jobs:
   deploy-prod:
     needs: build
     if: ${{ github.event_name == 'push' && ((github.base_ref == 'master' || github.ref == 'refs/heads/master')) }}
-    runs-on: 
-      - self-hosted
-      - elevated
+    runs-on: self-hosted
 
     steps:
     - name: Download Build Artifact
@@ -99,16 +96,15 @@ jobs:
         name: bot-deploy-${{ env.bot-name }}
         path: ${{ github.workspace }}
 
-    - name: Shutdown Current Bot Service
-      run: |
-        & "C:\nssm\nssm.exe" stop ${{ env.bot-name }}
-
-    - name: Clear Current Prod Dir
-      run: Remove-Item Z:\${{ env.bot-name }}\* -Recurse -Force
-
     - name: Unzip Artifact To Production Dir
-      run: Expand-Archive ${{ github.workspace }}\${{ env.bot-name }}.zip -DestinationPath Z:\ -PassThru
+      run: Expand-Archive ${{ github.workspace }}\${{ env.bot-name }}.zip -DestinationPath ${{ github.workspace }}\pre-stage -PassThru
 
-    - name: Start Bot Service
-      run: |
-        & "C:\nssm\nssm.exe" start ${{ env.bot-name }}
+    - name: Deploy Staging
+      uses: garygrossgarten/github-action-scp@release
+      with:
+        local: ${{ github.workspace }}\pre-stage
+        remote: /home/jpadmin/stage/prod/${{ env.bot-name }}
+        rmRemote: true
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        password: ${{ secrets.SSH_PASSWORD }}
