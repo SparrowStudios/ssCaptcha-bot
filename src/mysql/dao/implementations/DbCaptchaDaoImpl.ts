@@ -14,6 +14,7 @@ export class DbCaptchaDaoImpl implements IDbCaptchaDao {
 
     async createAsync(item: DbCaptcha): Promise<void> {
         try {
+            console.log(item);
             // Define variables
             const query = "INSERT INTO captchas (assignedUser, image, dataURL, value, expires) VALUES (?, BINARY(?), ?, ?, ?)";
             const params = [item.assignedUser, item.image, item.dataUrl, item.value, item.expires];
