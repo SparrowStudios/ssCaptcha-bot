@@ -33,6 +33,7 @@ CREATE TABLE `captchas` (
     `assignedUser`          INT NOT NULL,
     `image`                 LONGBLOB NOT NULL,
     `value`                 CHAR(6) NOT NULL,
+    `dataUrl`                 TEXT NOT NULL,
     `expires`               TIMESTAMP DEFAULT NULL,
     `updated`               TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `created`               TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
